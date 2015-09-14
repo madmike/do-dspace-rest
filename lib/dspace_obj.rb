@@ -63,7 +63,7 @@ class DSpaceObj
 
   def self.get_one(parent, path, klass)
     raw_json =  App::REST_API.get(path, {})
-    obj = klass.new(parent)
+    obj = klass.new(parent, {})
     parse(obj, raw_json)
     return obj
   end
