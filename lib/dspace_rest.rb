@@ -5,6 +5,8 @@ class DSpaceRest
 
   def initialize(baseurl)
     @baseurl = baseurl
+    @path = URI(baseurl).path
+    @base = baseurl.sub(@path, '')
     @last_res = nil;
     @login_token = nil;
   end
@@ -20,19 +22,36 @@ class DSpaceRest
     @login_token = nil;
   end
 
-  def get(path, params)
-    #TODO send login token along
+  def get(action, params)
+    uri = @baseurl + "/" + action;
+    return get_it(uri, params)
+  end
+
+  def get_link(link, params)
+    uri =  @base + "/" + link
+    return get_it(uri, params)
+  end
+
+  def get_it(uri, params)
     options = {"params" => params, :content_type => :json, :accept => :json}
     options['rest-dspace-token'] = @login_token if (not @login_token.nil?)
-    uri = @baseurl + "/" + path
     res = RestClient.get uri, options
     @last_res = JSON.parse(res)
     return @last_res
   end
 
-  def post(path, params)
-    uri = @baseurl + "/" + path;
-    puts uri;
+  def post(action, params)
+    uri = @baseurl + "/" + action;
+    return post_it(uri, params)
+  end
+
+  def post_link(link, params)
+    uri = @base + link;
+    return post_it(uri, params)
+  end
+
+  def post_it(uri, params)
+    puts "POST #{uri} params #{params}"
     options = {:content_type => :json, :accept => :json}
     options['rest-dspace-token'] = @login_token if (not @login_token.nil?)
     @last_res = RestClient.post uri, params.to_json, options
@@ -40,11 +59,20 @@ class DSpaceRest
     return @last_res
   end
 
-  def delete(path)
-    uri = @baseurl + "/" + path;
+  def delete(action)
+    uri = @baseurl + "/" + action;
     options = {:content_type => :json, :accept => :json}
     options['rest-dspace-token'] = @login_token if (not @login_token.nil?)
     @last_res = RestClient.delete uri, options
     return @last_res
+  end
+
+  def self.clean_params(params)
+    params.each do |k,v|
+      if (v.class == String) then
+          params[k] = v.strip
+      end
+    end
+    return params
   end
 end
