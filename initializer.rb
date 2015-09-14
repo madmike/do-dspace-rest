@@ -1,15 +1,6 @@
-ENV['BUNDLE_GEMFILE'] ||= File.expand_path('../Gemfile', __FILE__)
-
-require 'bundler/setup' if File.exists?(ENV['BUNDLE_GEMFILE'])
-
 require 'rails/all'
 
-require 'dspace_rest'
-require 'dspace_obj'
-require 'dcommunity'
-require 'dcollection'
-require 'ditem'
-require 'dbitstream'
+Dir["lib/*.rb"].each {|file| require file.sub(/lib./, '')}
 
 module App
     BASE_URL  = "http://localhost:8080/rest"
