@@ -17,3 +17,15 @@ end
 #d = DCommunity.new("name" => "new")
 #d.save
 #d.delete
+
+if (false) then
+comm_name = "Archival Collections from the Middle East"
+com = DCommunity.find_by_name(comm_name)
+com.delete if com
+com = DCommunity.new("name" => comm_name)
+com.save
+
+coll_name = "Archival Garbage"
+com = DCollection.new(com, "name" => coll_name)
+com.save
+end

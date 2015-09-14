@@ -12,6 +12,7 @@ class DCollection  < DSpaceObj
   end
 
   def self.find_by_name(name)
+    # TODO figure out hwo to use /collections/find-collection
     list({}).each do |com|
       return com if com.attributes['name'] == name.strip
     end

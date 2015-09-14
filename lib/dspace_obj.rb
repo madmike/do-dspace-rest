@@ -8,10 +8,6 @@ class DSpaceObj
   end
 
   def save
-    return self
-  end
-
-  def save
     puts "#{self.class}.save parent=#{@parent} #{@attributes}"
     if (@parent.nil?) then
       uri = self.class::PATH
