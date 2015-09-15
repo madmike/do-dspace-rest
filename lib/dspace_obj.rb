@@ -51,9 +51,20 @@ class DSpaceObj
     return @attributes['id']
   end
 
+  # if parent.nil?  list all of given klass   (PATH: /<klass::PATH>)
+  # otherwise list all of given klass with in self   (PATH: /<@parent.link>/<klass::PATH>)
+  def list(klass, params)
+    DSpaceObj.get_list(self, klass::PATH, klass, params)
+  end
+
   def self.get_list(parent, path, klass, params)
     l = []
-    App::REST_API.get(path, params).each do |c|
+    if (parent.nil?) then
+      rest_l = App::REST_API.get(klass::PATH, params)
+    else
+      rest_l = App::REST_API.get_link(parent.attributes['link'] + "/#{klass::PATH}", params)
+    end
+    rest_l.each do |c|
       obj = klass.new(parent, {})
       parse(obj, c)
       l << obj

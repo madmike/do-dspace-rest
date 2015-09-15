@@ -28,11 +28,12 @@ class DSpaceRest
   end
 
   def get_link(link, params)
-    uri =  @base + "/" + link
+    uri =  @base  + link
     return get_it(uri, params)
   end
 
   def get_it(uri, params)
+    puts "GET #{uri} params #{params}"
     options = {"params" => params, :content_type => :json, :accept => :json}
     options['rest-dspace-token'] = @login_token if (not @login_token.nil?)
     res = RestClient.get uri, options

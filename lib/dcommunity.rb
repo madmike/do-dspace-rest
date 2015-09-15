@@ -20,8 +20,7 @@ class DCommunity < DSpaceObj
   end
 
   def collections(params)
-    id = self['id'];
-    return DSpaceObj.get_list(self, "#{PATH}/#{id}/collections", DCollection, params)
+    return list(DCollection, params)
   end
 
 end

@@ -20,8 +20,7 @@ class DCollection  < DSpaceObj
   end
 
   def items(params)
-    id = self['id'];
-    return DSpaceObj.get_list(self, "#{PATH}/#{id}/items", DItem, params)
+    return list(DItem, params)
   end
 
 end
