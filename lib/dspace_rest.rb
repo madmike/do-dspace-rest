@@ -3,12 +3,14 @@ require 'json'
 
 class DSpaceRest
 
-  def initialize(baseurl)
+  # TODO integrate with logging
+  def initialize(baseurl, debug)
     @baseurl = baseurl
     @path = URI(baseurl).path
     @base = baseurl.sub(@path, '')
     @last_res = nil;
     @login_token = nil;
+    @debug = debug
   end
 
   def login(email, pwd)
@@ -28,12 +30,12 @@ class DSpaceRest
   end
 
   def get_link(link, params)
-    uri =  @base  + link
+    uri = @base + link
     return get_it(uri, params)
   end
 
   def get_it(uri, params)
-    puts "GET #{uri} params #{params}"
+    trace "GET #{uri} params #{params}" if (@debug)
     options = {"params" => params, :content_type => :json, :accept => :json}
     options['rest-dspace-token'] = @login_token if (not @login_token.nil?)
     res = RestClient.get uri, options
@@ -52,7 +54,7 @@ class DSpaceRest
   end
 
   def post_it(uri, params)
-    puts "POST #{uri} params #{params}"
+    trace "POST #{uri} params #{params}" if @debug
     options = {:content_type => :json, :accept => :json}
     options['rest-dspace-token'] = @login_token if (not @login_token.nil?)
     @last_res = RestClient.post uri, params.to_json, options
@@ -69,11 +71,16 @@ class DSpaceRest
   end
 
   def self.clean_params(params)
-    params.each do |k,v|
+    params.each do |k, v|
       if (v.class == String) then
-          params[k] = v.strip
+        params[k] = v.strip
       end
     end
     return params
+  end
+
+  # TODO var args list
+  def trace(str)
+    puts "\t\t#{str}"
   end
 end
