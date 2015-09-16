@@ -1,7 +1,7 @@
 require 'dspace_obj'
 
 class DCollection  < DSpaceObj
-  PATH = "collections"
+  PATH = "/collections"
 
   def self.list(params)
     return DSpaceObj.get_list(nil, self, params)

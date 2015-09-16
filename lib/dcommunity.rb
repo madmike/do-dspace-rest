@@ -2,7 +2,7 @@ require 'dspace_obj'
 require 'dcollection'
 
 class DCommunity < DSpaceObj
-  PATH = "communities"
+  PATH = "/communities"
 
   def self.list(params)
     return DSpaceObj.get_list(nil, self, params)

@@ -5,7 +5,8 @@ Dir["lib/*.rb"].each {|file| require file.sub(/lib./, '')}
 module App
     BASE_URL  = "http://localhost:8080/rest"
     REST_API = DSpaceRest.new(BASE_URL, true)
-    REST_API.login("admin@admin.edu", "admin")
+    ADMIN_ACCOUNT = {'email' => "admin@admin.edu", 'password' => "admin"}
+    REST_API.login(ADMIN_ACCOUNT)
 end
 
 #DCollection.list({})

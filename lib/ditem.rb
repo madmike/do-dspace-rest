@@ -1,7 +1,7 @@
 require 'dspace_obj'
 
 class DItem  < DSpaceObj
-  PATH = "items"
+  PATH = "/items"
 
   def self.list(params)
     return DSpaceObj.get_list(nil, self, params)

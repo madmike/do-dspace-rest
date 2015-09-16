@@ -13,19 +13,21 @@ class DSpaceRest
     @debug = debug
   end
 
-  def login(email, pwd)
+  def login(account)
     uri = @baseurl + "/login"
-    params = {'email' => email, 'password' => pwd}
-    @login_token = RestClient.post uri, params.to_json, :content_type => :json, :accept => :json
-    return @login_token
+    @login_token = RestClient.post uri, account.to_json, :content_type => :json, :accept => :json
   end
 
   def logout
     @login_token = nil;
   end
 
-  def get(action, params)
-    uri = @baseurl + "/" + action;
+  def login_token
+    return @login_token
+  end
+
+  def get(path, params)
+    uri = @baseurl + path;
     return get_it(uri, params)
   end
 
@@ -35,7 +37,7 @@ class DSpaceRest
   end
 
   def get_it(uri, params)
-    trace "GET #{uri} params #{params}" if (@debug)
+    trace "GET", uri, params if (@debug)
     options = {"params" => params, :content_type => :json, :accept => :json}
     options['rest-dspace-token'] = @login_token if (not @login_token.nil?)
     res = RestClient.get uri, options
@@ -44,7 +46,7 @@ class DSpaceRest
   end
 
   def post(action, params)
-    uri = @baseurl + "/" + action;
+    uri = @baseurl + action;
     return post_it(uri, params)
   end
 
@@ -54,7 +56,7 @@ class DSpaceRest
   end
 
   def post_it(uri, params)
-    trace "POST #{uri} params #{params}" if @debug
+    trace "POST", uri, params if (@debug)
     options = {:content_type => :json, :accept => :json}
     options['rest-dspace-token'] = @login_token if (not @login_token.nil?)
     @last_res = RestClient.post uri, params.to_json, options
@@ -79,8 +81,13 @@ class DSpaceRest
     return params
   end
 
-  # TODO var args list
-  def trace(str)
-    puts "\t\t#{str}"
+# TODO var args list
+  def trace(action, uri, params)
+    puts "curl -k -4 --silent " +
+             " -H 'rest-dspace-token: #{@login_token}'" +
+             ' -H "accept: application/json"  -H "Content-Type: application/json"' +
+             " -X #{action} '#{uri}'" +
+             " -d '#{JSON.generate(params)}'"
   end
+
 end

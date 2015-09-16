@@ -1,7 +1,7 @@
 require 'dspace_obj'
 
 class DBitstream  < DSpaceObj
-  PATH = "bitstreams"
+  PATH = "/bitstreams"
 
   def self.list(params)
     return DSpaceObj.get_list(self, params)

@@ -17,25 +17,18 @@ def generate(file)
         collections.each do |col|
           coll = find_or_create_collection(parent, col["name"])
           puts "collection in #{parent.name}\t#{coll.handle}\t#{coll.name}\t"
-          nretry = 0;
           n = col["nitems"] || 0
           n.times do
-
             md = fake_metadata
             item = DItem.new(coll, {"metadata" => md})
-            success = false
-            while (not success) do
-              begin
-                item.save
-                puts "item in #{parent.name}\t#{coll.handle}\t#{coll.name}\t#{item.handle}\t#{item.name}"
-                success = true
-              rescue RestClient::InternalServerError => e
-                $stderr.puts "rest create item error: " + e.to_s
-                success = false
-                nretry = nretry + 1
-              end
+            puts "item #{item}"
+            begin
+             item.save
+             puts "item in #{parent.name}\t#{coll.handle}\t#{coll.name}\t#{item.handle}\t#{item.name}"
+            rescue RestClient::InternalServerError => e
+              #$STDERR.puts "coud not save #{item.to_detailed_s}"
+              $STDERR.puts e.to_s
             end
-            puts "WARNING: item cretion in #{parent.name}\t#{coll.handle}\t#{coll.name}: #{nretry} failures for #{n} items" if nretry > 0
           end
         end
       end
@@ -113,11 +106,11 @@ generate(test_data_file)
 
 if (false) then
 #puts fake_metadata
-  comm_name = "Faculty Publications"
+comm_name = "Faculty Publications"
 
-  puts com = DCommunity.find_by_name(comm_name)
+puts com = DCommunity.find_by_name(comm_name)
 
-  puts com.collections({})
+puts com.collections({})
 #puts com.collections({})[0].items({})
 end
 

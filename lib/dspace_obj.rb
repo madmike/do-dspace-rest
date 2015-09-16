@@ -9,12 +9,11 @@ class DSpaceObj
 
   def save
     if (@parent.nil?) then
-      uri = self.class::PATH
+      @attributes = @attributes.merge  App::REST_API.post(self.class::PATH, @attributes)
     else
       link = @parent.attributes['link'];
-      uri = "#{link}/#{self.class::PATH}"
+      @attributes = @attributes.merge  App::REST_API.post_link("#{link}#{self.class::PATH}", @attributes)
     end
-    @attributes = @attributes.merge  App::REST_API.post_link(uri, @attributes)
     return self
   end
 
@@ -50,6 +49,10 @@ class DSpaceObj
     return @attributes['id']
   end
 
+  def to_detailed_s
+    return "#{self.class}[parent=#{@patent}, #{@attributes}]"
+  end
+
   # if parent.nil?  list all of given klass   (PATH: /<klass::PATH>)
   # otherwise list all of given klass with in self   (PATH: /<@parent.link>/<klass::PATH>)
   def list(klass, params)
@@ -61,7 +64,7 @@ class DSpaceObj
     if (parent.nil?) then
       rest_l = App::REST_API.get(klass::PATH, params)
     else
-      rest_l = App::REST_API.get_link(parent.attributes['link'] + "/#{klass::PATH}", params)
+      rest_l = App::REST_API.get_link(parent.attributes['link'] + "#{klass::PATH}", params)
     end
     rest_l.each do |c|
       obj = klass.new(parent, {})
