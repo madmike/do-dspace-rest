@@ -8,7 +8,6 @@ class DSpaceObj
   end
 
   def save
-    puts "#{self.class}.save parent=#{@parent} #{@attributes}"
     if (@parent.nil?) then
       uri = self.class::PATH
     else
@@ -54,10 +53,10 @@ class DSpaceObj
   # if parent.nil?  list all of given klass   (PATH: /<klass::PATH>)
   # otherwise list all of given klass with in self   (PATH: /<@parent.link>/<klass::PATH>)
   def list(klass, params)
-    DSpaceObj.get_list(self, klass::PATH, klass, params)
+    DSpaceObj.get_list(self, klass, params)
   end
 
-  def self.get_list(parent, path, klass, params)
+  def self.get_list(parent, klass, params)
     l = []
     if (parent.nil?) then
       rest_l = App::REST_API.get(klass::PATH, params)

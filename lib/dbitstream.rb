@@ -4,7 +4,7 @@ class DBitstream  < DSpaceObj
   PATH = "bitstreams"
 
   def self.list(params)
-    return DSpaceObj.get_list(PATH, self, params)
+    return DSpaceObj.get_list(self, params)
   end
 
   def self.find_by_id(id)

@@ -5,7 +5,7 @@ class DCommunity < DSpaceObj
   PATH = "communities"
 
   def self.list(params)
-    return DSpaceObj.get_list(nil, PATH, self, params)
+    return DSpaceObj.get_list(nil, self, params)
   end
 
   def self.find_by_id(id)
