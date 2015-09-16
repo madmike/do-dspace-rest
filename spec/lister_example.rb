@@ -9,9 +9,14 @@ RSpec.shared_examples "listers" do |klass|
 
   [0, 1, 5].each do |limit|
     it "#{klass}_get_#{limit}" do
-      obj = klass.list({'limit' => limit, 'offset' => 0})
-      expect(obj.is_a?(Array)).to be true
-      expect(obj.count).to eq(limit)
+      all = klass.list({})
+      if (all.count >= limit) then
+        obj = klass.list({'limit' => limit, 'offset' => 0})
+        expect(obj.is_a?(Array)).to be true
+        expect(obj.count).to eq(limit)
+      else
+        raise "not enough #{klass} objects for test case"
+      end
     end
   end
 
