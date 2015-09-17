@@ -59,12 +59,12 @@ class DSpaceObj
     DSpaceObj.get_list(self, klass, params)
   end
 
-  def self.get_list(parent, klass, params)
+  def self.get_sublist(parent, klass, subpath, params)
     l = []
     if (parent.nil?) then
-      rest_l = App::REST_API.get(klass::PATH, params)
+      rest_l = App::REST_API.get(klass::PATH + subpath, params)
     else
-      rest_l = App::REST_API.get_link(parent.attributes['link'] + "#{klass::PATH}", params)
+      rest_l = App::REST_API.get_link(parent.attributes['link'] + "#{klass::PATH}" + subpath, params)
     end
     rest_l.each do |c|
       obj = klass.new(parent, {})
@@ -72,6 +72,10 @@ class DSpaceObj
       l << obj
     end
     return l
+  end
+
+  def self.get_list(parent, klass, params)
+    return self.get_sublist(parent, klass, "", params)
   end
 
   def self.get_one(parent, path, klass)
