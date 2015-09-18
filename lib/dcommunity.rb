@@ -23,6 +23,10 @@ class DCommunity < DSpaceObj
     return nil
   end
 
+  def communities(params)
+    return list(DCommunity, params)
+  end
+
   def collections(params)
     return list(DCollection, params)
   end

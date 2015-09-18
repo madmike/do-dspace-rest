@@ -5,9 +5,9 @@ class DSpaceRest
 
   # TODO integrate with logging
   def initialize(baseurl, debug)
-    @baseurl = baseurl
-    @path = URI(baseurl).path
-    @base = baseurl.sub(@path, '')
+    @baseurl = baseurl     # http://localhost:8080/rest
+    @path = URI(baseurl).path     # /rest
+    @base = baseurl.sub(@path, '')  # http://localhost:8080
     @last_res = nil;
     @login_token = nil;
     @debug = debug
@@ -28,66 +28,49 @@ class DSpaceRest
 
   def get(path, params)
     uri = @baseurl + path;
-    return get_it(uri, params)
-  end
-
-  def get_link(link, params)
-    uri = @base + link
-    return get_it(uri, params)
-  end
-
-  def get_it(uri, params)
     trace "GET", uri, params if (@debug)
-    options = {"params" => params, :content_type => :json, :accept => :json}
-    options['rest-dspace-token'] = @login_token if (not @login_token.nil?)
-    res = RestClient.get uri, options
+    res = RestClient.get uri, {"params" => params}.merge(build_options)
     @last_res = JSON.parse(res)
     return @last_res
   end
 
   def post(action, params)
     uri = @baseurl + action;
-    return post_it(uri, params)
-  end
-
-  def post_link(link, params)
-    uri = @base + link;
-    return post_it(uri, params)
-  end
-
-  def post_it(uri, params)
     trace "POST", uri, params if (@debug)
-    options = {:content_type => :json, :accept => :json}
-    options['rest-dspace-token'] = @login_token if (not @login_token.nil?)
-    @last_res = RestClient.post uri, params.to_json, options
+    @last_res = RestClient.post uri, params.to_json, build_options
     @last_res = JSON.parse(@last_res)
     return @last_res
   end
 
-  def delete(action)
-    uri = @baseurl + "/" + action;
-    options = {:content_type => :json, :accept => :json}
-    options['rest-dspace-token'] = @login_token if (not @login_token.nil?)
-    @last_res = RestClient.delete uri, options
+  def put(who, params)
+    uri = @baseurl + who
+    trace "PUT", uri, params if (@debug)
+    @last_res = RestClient.put uri, params.to_json, build_options
     return @last_res
   end
 
-  def self.clean_params(params)
-    params.each do |k, v|
-      if (v.class == String) then
-        params[k] = v.strip
-      end
-    end
-    return params
+  def delete(who)
+    uri = @baseurl + who;
+    trace "DELETE", uri, nil if (@debug)
+    @last_res = RestClient.delete uri, build_options
+    return @last_res
   end
 
-# TODO var args list
+  private
+
+  def build_options
+    options = {:content_type => :json, :accept => :json}
+    options['rest-dspace-token'] = @login_token if (not @login_token.nil?)
+    return options
+  end
+
   def trace(action, uri, params)
-    puts "curl -k -4 --silent " +
-             " -H 'rest-dspace-token: #{@login_token}'" +
-             ' -H "accept: application/json"  -H "Content-Type: application/json"' +
-             " -X #{action} '#{uri}'" +
-             " -d '#{JSON.generate(params)}'"
+    cmd = "curl -k -4 --silent " +
+        " -H 'rest-dspace-token: #{@login_token}'" +
+        ' -H "accept: application/json"  -H "Content-Type: application/json"' +
+        " -X #{action} '#{uri}'";
+    cmd = cmd + " -d '#{JSON.generate(params)}'" if params
+    puts cmd;
   end
 
 end
