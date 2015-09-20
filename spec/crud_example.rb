@@ -60,7 +60,7 @@ RSpec.shared_examples "crud" do |klass, prop_keys, parent|
 
   it "read" do
     create = make("name" => fake_prop_val("name"))
-    read = DCollection.find_by_id(create.id)
+    read = KLASS.find_by_id(create.id)
     expect(read.attributes["name"]).to eq(create.attributes["name"])
     create.delete
   end
