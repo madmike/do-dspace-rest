@@ -5,10 +5,10 @@ require "crud_example"
 require "has_many_example"
 
 RSpec.describe DCollection do
-  include_examples "listers", DCollection
-  include_examples "byid", DCollection
-  include_examples "has_many", DCollection, "items"
+  include_examples "listers"
+  include_examples "byid"
+  include_examples "has_many", "items"
 
-   include_examples "crud"
+  include_examples "crud"
 end
 

@@ -5,9 +5,9 @@ require "has_many_example"
 require "crud_example"
 
 RSpec.describe DCommunity do
-  include_examples "listers", DCommunity
-  include_examples "byid", DCommunity
-  include_examples "has_many", DCommunity, "collections"
+  include_examples "listers"
+  include_examples "byid"
+  include_examples "has_many", "collections"
 
   include_examples "crud"
 
