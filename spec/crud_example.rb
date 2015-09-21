@@ -1,21 +1,30 @@
-RSpec.shared_examples "crud" do |klass, prop_keys, parent|
-  PROP_KEYS = prop_keys
-  PARENT = parent
-  KLASS = klass
+RSpec.shared_examples "crud" do
+  def self.prop_keys
+    ["name", "copyrightText", "introductoryText", "shortDescription", "sidebarText"]
+  end
 
-  def make(attrs)
-    obj = KLASS.new(PARENT, attrs)
+  def prop_keys
+    return self.class.prop_keys
+  end
+
+  def make(klass, attrs)
+    if (klass == DCollection) then
+      parent = DCommunity.list('limit' => 1)[0]
+    else
+      parent = nil
+    end
+    obj = klass.new(parent, attrs)
     obj.save
     return obj
   end
 
-  def update_attrs(id, attrs)
-    upd = KLASS.find_by_id(id)
+  def update_attrs(klass, id, attrs)
+    upd = klass.find_by_id(id)
     attrs.each { |k, v|
       upd[k] = v
     }
     upd.save
-    read = KLASS.find_by_id(id)
+    read = klass.find_by_id(id)
     return read;
   end
 
@@ -25,16 +34,27 @@ RSpec.shared_examples "crud" do |klass, prop_keys, parent|
 
   def fake_prop_hash(prefix)
     hsh={}
-    PROP_KEYS.each { |k| hsh[k] = "#{prefix}:#{fake_prop_val(k)}" }
+    prop_keys.each { |k| hsh[k] = "#{prefix}:#{fake_prop_val(k)}" }
     return hsh
   end
 
-  PROP_KEYS.each do |prop|
+  it "create_then_delete" do
+    create = make(described_class, "name" => fake_prop_val("name"))
+    id = create.id
+    expect(id).to_not be_nil
+    expect(described_class.find_by_id(id)).to_not  be_nil
+    res = create.delete
+    expect(res == "")
+    expect { described_class.find_by_id(id) }.to raise_error(RestClient::ResourceNotFound)
+  end
+
+
+  prop_keys.each do |prop|
     it "create single_#{prop}" do
       val = fake_prop_val(prop)
-      create = make(prop => val)
+      create = make(described_class, prop => val)
       expect(create.attributes['id']).to_not be_nil
-      PROP_KEYS.each do |k|
+      prop_keys.each do |k|
         if (k == prop) then
           expect(create.attributes[prop]).to eq(val)
         elsif (k == "name") then
@@ -50,7 +70,7 @@ RSpec.shared_examples "crud" do |klass, prop_keys, parent|
 
   it "create multi_val" do
     hsh = fake_prop_hash("CREATE")
-    create = make(hsh)
+    create = make(described_class, hsh)
     expect(create.attributes['id']).to_not be_nil
     hsh.each do |k, v|
       expect(create.attributes[k]).to eq(v)
@@ -59,17 +79,17 @@ RSpec.shared_examples "crud" do |klass, prop_keys, parent|
   end
 
   it "read" do
-    create = make("name" => fake_prop_val("name"))
-    read = KLASS.find_by_id(create.id)
+    create = make(described_class, "name" => fake_prop_val("name"))
+    read = described_class.find_by_id(create.id)
     expect(read.attributes["name"]).to eq(create.attributes["name"])
     create.delete
   end
 
-  PROP_KEYS.each do |prop|
+  prop_keys.each do |prop|
     it "update single_#{prop}" do
       hsh = fake_prop_hash("MAKE")
-      create = make(hsh)
-      upd = update_attrs(create.id, prop => "UPD " + fake_prop_val(prop))
+      create = make(described_class, hsh)
+      upd = update_attrs(described_class, create.id, prop => "UPD " + fake_prop_val(prop))
       upd.attributes.each do |k, v|
         if (k == prop) then
           expect(upd.attributes[prop]).to eq("UPD " + fake_prop_val(prop))
@@ -83,21 +103,14 @@ RSpec.shared_examples "crud" do |klass, prop_keys, parent|
 
   it "update multi_val" do
     hsh = fake_prop_hash("MAKE")
-    create = make(hsh)
+    create = make(described_class, hsh)
     new_hsh = fake_prop_hash("UPD")
-    upd = update_attrs(create.id, new_hsh)
-    PROP_KEYS.each do |k|
+    upd = update_attrs(described_class, create.id, new_hsh)
+    prop_keys.each do |k|
       expect(upd.attributes[k]).to eq(new_hsh[k])
     end
     create.delete
   end
 
-  it "delete" do
-    create = make("name" => fake_prop_val("name"))
-    id = create.id
-    res = create.delete
-    expect(res == "")
-    expect { DCollection.find_by_id(id) }.to raise_error(RestClient::ResourceNotFound)
-  end
 
 end

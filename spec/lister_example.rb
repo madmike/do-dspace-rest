@@ -1,10 +1,11 @@
 RSpec.shared_examples "listers" do |klass|
-  DEFAULT_MAX_INLIST = 100
+
+ let(:max_in_list) { 100 }
 
   it "#{klass}_all" do
     obj = klass.list({})
     expect(obj.is_a?(Array)).to be true
-    expect(obj.count <= DEFAULT_MAX_INLIST).to be true
+    expect(obj.count <= max_in_list).to be true
   end
 
   [0, 1, 5].each do |limit|

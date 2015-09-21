@@ -9,10 +9,6 @@ RSpec.describe DCollection do
   include_examples "byid", DCollection
   include_examples "has_many", DCollection, "items"
 
-  PROP_KEYS = ["name", "copyrightText", "introductoryText", "shortDescription", "sidebarText"]
-  parent = DCommunity.list({})[0]
-  include_examples "crud", DCollection, PROP_KEYS, parent
-
-
+   include_examples "crud"
 end
 
