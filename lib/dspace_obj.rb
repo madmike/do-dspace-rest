@@ -91,8 +91,8 @@ class DSpaceObj
     return l
   end
 
-  def self.get_one(parent, path, klass)
-    raw_json =  App::REST_API.get(path, {})
+  def self.get_one(parent, path, klass, expand = [])
+    raw_json =  App::REST_API.get(path, {'expand' => expand.join(',')})
     obj = klass.new(parent, {})
     parse(obj, raw_json)
     return obj

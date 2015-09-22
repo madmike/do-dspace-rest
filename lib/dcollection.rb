@@ -2,13 +2,14 @@ require 'dspace_obj'
 
 class DCollection  < DSpaceObj
   PATH = "/collections"
-
+  EXPAND = ["parentCommunityList","parentCommunity","items","license","logo"];
+  
   def self.list(params)
     return DSpaceObj.get_list(nil, self, params)
   end
 
-  def self.find_by_id(id)
-    return DSpaceObj.get_one(nil,"#{PATH}/#{id}", self)
+  def self.find_by_id(id, expand = [])
+    return DSpaceObj.get_one(nil, "#{PATH}/#{id}", self, expand)
   end
 
   def self.find_by_name(name)

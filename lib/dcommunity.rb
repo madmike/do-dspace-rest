@@ -3,6 +3,7 @@ require 'dcollection'
 
 class DCommunity < DSpaceObj
   PATH = "/communities"
+  EXPAND = ["parentCommunity", "collections", "subCommunities", "logo"]
 
   def self.list(params)
     return DSpaceObj.get_list(nil, self, params)
@@ -12,8 +13,8 @@ class DCommunity < DSpaceObj
     return DSpaceObj.get_sublist(nil, self, '/top-communities', params)
   end
 
-  def self.find_by_id(id)
-    return DSpaceObj.get_one(nil, "#{PATH}/#{id}", self)
+  def self.find_by_id(id, expand = [])
+    return DSpaceObj.get_one(nil, "#{PATH}/#{id}", self, expand)
   end
 
   def self.find_by_name(name)
