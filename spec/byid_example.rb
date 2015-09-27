@@ -11,17 +11,20 @@ RSpec.shared_examples "byid" do
     end
   end
 
-  described_class::EXPAND.each do |ex|
-    it "byid_expand_#{ex}" do
+  described_class::EXPAND.each do |expand|
+    it "byid_expand_#{expand}" do
       obj = described_class.list({'limit' => 1})
       if (obj.count > 0) then
         one = obj[0]
-        the_one = described_class.find_by_id(one.id, [ex]);
+        the_one = described_class.find_by_id(one.id, [expand]);
         described_class::EXPAND.each do |x|
-          val = the_one.attributes[x]
-          val = false if val == []
-          if (val and x != ex) then
-            raise "#{x}=#{val} should not be expanded"
+          #puts "#{expand} tst-#{x} #{the_one.attributes.keys.join(":")}"
+          if (the_one.attributes.keys.include?(x) != (x == expand)) then
+            if (x == expand) then
+              raise "#{x} should be expanded for #{the_one.to_s}"
+            else
+              raise "#{x} should NOT be expanded for #{the_one.to_s}"
+            end
           end
         end
       end
@@ -35,10 +38,12 @@ RSpec.shared_examples "byid" do
       one = obj[0]
       the_one = described_class.find_by_id(one.id, pair);
       described_class::EXPAND.each do |x|
-        val = the_one.attributes[x]
-        val = false if val == []
-        if (val and not pair.include?(x)) then
-          raise "#{x} should not be expanded"
+        if (the_one.attributes.keys.include?(x) != pair.include?(x)) then
+          if (pair.include?(x)) then
+            raise "#{x} should be expanded for #{the_one.to_s} and with expand=#{pair.join(",")}"
+          else
+            raise "#{x} should NOT be expanded for #{the_one.to_s} and with expand=#{pair.join(",")}"
+          end
         end
       end
     end

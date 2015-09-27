@@ -101,6 +101,7 @@ class DSpaceObj
   def self.parse(object, raw_json)
     raw_json.each do |key, value|
       unless key == 'expand'
+        #puts "#{key}=#{value}"
         object[key] =  value
       end
     end
