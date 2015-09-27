@@ -27,6 +27,8 @@ RSpec.shared_examples "byid" do
             end
           end
         end
+      else
+        raise "not enough #{described_class} objects for test case"
       end
     end
   end
@@ -46,6 +48,8 @@ RSpec.shared_examples "byid" do
           end
         end
       end
+    else
+      raise "not enough #{described_class} objects for test case"
     end
   end
 
@@ -54,11 +58,20 @@ RSpec.shared_examples "byid" do
     if (obj.count > 0) then
       one = obj[0]
       the_one = described_class.find_by_id(one.id, ["all"]);
+      # test for ARRAY type
+
       described_class::EXPAND.each do |ex|
         if (not the_one.attributes.keys.include?(ex)) then
           raise "#{ex} should be expanded"
         end
+        if (described_class::EXPAND_TO_ARRAY.include?(ex)) then
+          if (the_one.attributes[ex].class != Array) then
+            raise "#{ex} should be an Array"
+          end
+        end
       end
+    else
+      raise "not enough #{described_class} objects for test case"
     end
   end
 end

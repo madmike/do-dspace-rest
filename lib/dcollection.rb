@@ -3,7 +3,8 @@ require 'dspace_obj'
 class DCollection  < DSpaceObj
   PATH = "/collections"
   EXPAND = ["parentCommunityList","parentCommunity","items","license","logo"];
-  
+  EXPAND_TO_ARRAY = ["parentCommunityList", "items"];
+
   def self.list(params)
     return DSpaceObj.get_list(nil, self, params)
   end

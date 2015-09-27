@@ -3,6 +3,7 @@ require 'dspace_obj'
 class DBitstream  < DSpaceObj
   PATH = "/bitstreams"
   EXPAND = ["parent", "policies"];
+  EXPAND_TO_ARRAY = ["policies"];
 
   def self.list(params)
     return DSpaceObj.get_list(nil, self, params)

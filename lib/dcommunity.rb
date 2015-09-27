@@ -4,6 +4,7 @@ require 'dcollection'
 class DCommunity < DSpaceObj
   PATH = "/communities"
   EXPAND = ["parentCommunity", "collections", "subCommunities", "logo"]
+  EXPAND_TO_ARRAY = ["subCommunities", "collections"];
 
   def self.list(params)
     return DSpaceObj.get_list(nil, self, params)
