@@ -1,9 +1,31 @@
 #!/usr/bin/env ruby  -I lib -I .
 require 'yaml';
 require 'faker';
-require 'initializer'
+require "highline/import"
+require 'do-dspace-rest'
 
-test_data_file = "gen_test_data.yml";
+
+baseurl, test_data_file, email, password = ARGV
+baseurl, test_data_file, email, password = ["http://localhost:8080/rest", "bin/gen_test_data.yml", "admin@admin.edu", "admin"]
+
+baseurl = ask("url of dspace rest endpoint ") unless baseurl
+test_data_file = ask("test data file (yml format please) ") unless test_data_file
+email = ask("email of dspace admin account ") unless email
+password =  ask("password for #{email}") unless password
+
+puts "baseurl            #{baseurl}"
+puts "test_data_file     #{test_data_file}"
+puts "credentials email: #{email} password:#{password.gsub(/./, "x")}"
+
+if ("Y" != ask("continue ? (Y/N)")) then
+  return
+end
+
+DSpaceRest.start(baseurl)
+dspace_api = DSpaceRest.connection
+puts dspace_api
+dspace_api.login({'email' => email, 'password' => password })
+
 
 def generate(file)
   test_data = YAML.load_file(file)
@@ -111,15 +133,7 @@ end
 
 generate(test_data_file)
 
-if (false) then
-#puts fake_metadata
-  comm_name = "Faculty Publications"
 
-  puts com = DCommunity.find_by_name(comm_name)
-
-  puts com.collections({})
-#puts com.collections({})[0].items({})
-end
 
 
 
