@@ -48,15 +48,15 @@ class DSpaceObj
       link = @parent.link + link if @parent
     end
     if id.nil? then
-      @attributes = @attributes.merge  App::REST_API.post(link, @attributes)
+      @attributes = @attributes.merge  DSpaceRest.connection.post(link, @attributes)
     else
-      App::REST_API.put(link, @attributes)
+      DSpaceRest.connection.put(link, @attributes)
     end
     return self
   end
 
   def delete
-    return App::REST_API.delete(link)
+    return DSpaceRest.connection.delete(link)
   end
 
 
@@ -82,7 +82,7 @@ class DSpaceObj
     link = klass::PATH
     link = parent.link + link if parent
     l = []
-    rest_l = App::REST_API.get(link, params)
+    rest_l = DSpaceRest.connection.get(link, params)
     rest_l.each do |c|
       obj = klass.new(parent, {})
       parse(obj, c)
@@ -92,7 +92,7 @@ class DSpaceObj
   end
 
   def self.get_one(parent, path, klass, expand = [])
-    raw_json =  App::REST_API.get(path, {'expand' => expand.join(',')})
+    raw_json =  DSpaceRest.connection.get(path, {'expand' => expand.join(',')})
     obj = klass.new(parent, {})
     parse(obj, raw_json)
     return obj

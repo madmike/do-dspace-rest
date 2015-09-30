@@ -7,6 +7,13 @@ install bundler, http://bundler.io/
 run 
     > bundle install
 
+# Logging 
+set environment variable 
+
+    > RESTCLIENT_LOG=stdout
+or    
+    > RESTCLIENT_LOG=filename 
+    
 # Configure 
 edit initialzer.rb 
 
