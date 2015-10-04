@@ -8,8 +8,8 @@ RSpec.shared_examples "crud" do
   end
 
   def make(klass, attrs)
-    if (klass == DSpace::Rest::DCollection) then
-      parent = DSpace::Rest::DCommunity.list('limit' => 1)[0]
+    if (klass == DSpace::Rest::Collection) then
+      parent = DSpace::Rest::Community.list('limit' => 1)[0]
     else
       parent = nil
     end

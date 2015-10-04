@@ -1,7 +1,7 @@
 
 module DSpace
   module Rest
-    class DCommunity < DSpaceObj
+    class Community < DSpaceObj
       PATH = "/communities"
       EXPAND = ["parentCommunity", "collections", "subCommunities", "logo"]
       EXPAND_TO_ARRAY = ["subCommunities", "collections"];
@@ -26,11 +26,11 @@ module DSpace
       end
 
       def communities(params)
-        return list(DCommunity, params)
+        return list(Community, params)
       end
 
       def collections(params)
-        return list(DCollection, params)
+        return list(Collection, params)
       end
 
     end

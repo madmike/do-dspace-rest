@@ -1,6 +1,6 @@
 module DSpace
   module Rest
-    class DItem < DSpaceObj
+    class Item < DSpaceObj
       PATH = "/items"
       EXPAND = ["metadata", "parentCollection", "parentCollectionList", "parentCommunityList", "bitstreams"]
       EXPAND_TO_ARRAY = ["parentCollectionList", "parentCommunityList", "bitstreams"];
@@ -14,7 +14,7 @@ module DSpace
       end
 
       def bitstreams(params)
-        return list(DBitstream, params)
+        return list(Bitstream, params)
       end
     end
 

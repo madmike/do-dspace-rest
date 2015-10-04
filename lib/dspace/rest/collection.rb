@@ -2,7 +2,7 @@
 module DSpace
   module Rest
 
-    class DCollection < DSpaceObj
+    class Collection < DSpaceObj
       PATH = "/collections"
       EXPAND = ["parentCommunityList", "parentCommunity", "items", "license", "logo"];
       EXPAND_TO_ARRAY = ["parentCommunityList", "items"];
@@ -24,7 +24,7 @@ module DSpace
       end
 
       def items(params)
-        return list(DItem, params)
+        return list(Item, params)
       end
 
     end

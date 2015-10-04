@@ -2,7 +2,7 @@
 module DSpace
   module Rest
 
-    class DBitstream < DSpaceObj
+    class Bitstream < DSpaceObj
       PATH = "/bitstreams"
       EXPAND = ["parent", "policies"];
       EXPAND_TO_ARRAY = ["policies"];

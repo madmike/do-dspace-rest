@@ -43,7 +43,7 @@ def generate(file)
           n.times do
 
             md = fake_metadata
-            item = DSpace::Rest::DItem.new(coll, {"metadata" => md})
+            item = DSpace::Rest::Item.new(coll, {"metadata" => md})
             success = false
             while (not success) do
               begin
@@ -65,18 +65,18 @@ def generate(file)
 end
 
 def find_or_create_community(comm_name)
-  com = DSpace::Rest::DCommunity.find_by_name(comm_name)
+  com = DSpace::Rest::Community.find_by_name(comm_name)
   if (com.nil?) then
-    com = DSpace::Rest::DCommunity.new(nil, "name" => comm_name)
+    com = DSpace::Rest::Community.new(nil, "name" => comm_name)
     com.save
   end
   return com
 end
 
 def find_or_create_collection(parent, name)
-  coll = DSpace::Rest::DCollection.find_by_name(name)
+  coll = DSpace::Rest::Collection.find_by_name(name)
   if (coll.nil?) then
-    coll = DSpace::Rest::DCollection.new(parent, {"name" => name})
+    coll = DSpace::Rest::Collection.new(parent, {"name" => name})
     coll.save
   end
   return coll
