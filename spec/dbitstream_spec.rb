@@ -1,8 +1,7 @@
-require "initializer"
+require "do-dspace-rest"
+require "connect"
 require "lister_example"
 require "byid_example"
-
-restapi = App::REST_API
 
 RSpec.describe DBitstream do
   include_examples "listers"

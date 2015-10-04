@@ -1,4 +1,5 @@
-require "initializer"
+require "do-dspace-rest"
+require "connect"
 require "lister_example"
 require "byid_example"
 require "has_many_example"
