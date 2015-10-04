@@ -1,3 +1,7 @@
+# Disclaimer 
+
+This is in its infancy. Bitstream upload is not yet implemented. 
+
 # Install 
 
 install ruby, https://www.ruby-lang.org/en/]
@@ -5,24 +9,29 @@ install ruby, https://www.ruby-lang.org/en/]
 install bundler, http://bundler.io/
 
 run 
-    > bundle install
+    bundle install
+
+# include in Gemfile 
+    gem 'do-dspace-rest', :git => 'https://github.com/akinom/do-dspace-rest', :ref => 'master'
 
 # Logging 
 set environment variable 
 
-    > RESTCLIENT_LOG=stdout
-or    
-    > RESTCLIENT_LOG=filename 
+    RESTCLIENT_LOG=stdout
+    RESTCLIENT_LOG=filename 
     
-# Configure 
-edit initialzer.rb 
 
 # Run Tests 
-run > rspec -I lib -I .
+run 
+    rspec -I lib -I .
 
+the file spec/connect.rb defines which dspace rest url to use for the tests 
 
 # generate test data
-edit gen_test_data.yml
 
-run > ./gen_test_data.rb
+run 
+    .bin/gen_test_data.rb
+
+The script asks which parameters to use; for an example file defining what communities, collections, 
+and how many items to generate see .bin/gen_test_data.rb
 
