@@ -14,7 +14,7 @@ RSpec.shared_examples "has_many" do |method|
   end
 
   [1, 5].each do |limit|
-    it "has_many #{method} get_#{limit}" do
+    it "has_many #{method} limit_#{limit}" do
       success = false
       list = described_class.list({})
       expect(list.is_a?(Array)).to be true

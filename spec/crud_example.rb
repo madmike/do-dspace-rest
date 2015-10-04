@@ -8,8 +8,8 @@ RSpec.shared_examples "crud" do
   end
 
   def make(klass, attrs)
-    if (klass == DCollection) then
-      parent = DCommunity.list('limit' => 1)[0]
+    if (klass == DSpace::Rest::DCollection) then
+      parent = DSpace::Rest::DCommunity.list('limit' => 1)[0]
     else
       parent = nil
     end
@@ -38,7 +38,7 @@ RSpec.shared_examples "crud" do
     return hsh
   end
 
-  it "create_then_delete" do
+  it "crud_create_then_delete" do
     create = make(described_class, "name" => fake_prop_val("name"))
     id = create.id
     expect(id).to_not be_nil
@@ -50,7 +50,7 @@ RSpec.shared_examples "crud" do
 
 
   prop_keys.each do |prop|
-    it "create single_#{prop}" do
+    it "crud_create single_#{prop}" do
       val = fake_prop_val(prop)
       create = make(described_class, prop => val)
       expect(create.attributes['id']).to_not be_nil
@@ -68,7 +68,7 @@ RSpec.shared_examples "crud" do
     end
   end
 
-  it "create multi_val" do
+  it "crud_create multi_val" do
     hsh = fake_prop_hash("CREATE")
     create = make(described_class, hsh)
     expect(create.attributes['id']).to_not be_nil
@@ -78,7 +78,7 @@ RSpec.shared_examples "crud" do
     create.delete
   end
 
-  it "read" do
+  it "crud_read" do
     create = make(described_class, "name" => fake_prop_val("name"))
     read = described_class.find_by_id(create.id)
     expect(read.attributes["name"]).to eq(create.attributes["name"])
@@ -86,7 +86,7 @@ RSpec.shared_examples "crud" do
   end
 
   prop_keys.each do |prop|
-    it "update single_#{prop}" do
+    it "crud_update single_#{prop}" do
       hsh = fake_prop_hash("MAKE")
       create = make(described_class, hsh)
       upd = update_attrs(described_class, create.id, prop => "UPD " + fake_prop_val(prop))
@@ -101,7 +101,7 @@ RSpec.shared_examples "crud" do
     end
   end
 
-  it "update multi_val" do
+  it "crud_update multi_val" do
     hsh = fake_prop_hash("MAKE")
     create = make(described_class, hsh)
     new_hsh = fake_prop_hash("UPD")

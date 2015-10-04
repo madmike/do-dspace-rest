@@ -1,9 +1,8 @@
-require "do-dspace-rest"
 require "connect"
 require "lister_example"
 require "byid_example"
 
-RSpec.describe DBitstream do
+RSpec.describe DSpace::Rest::DBitstream do
   include_examples "listers"
   include_examples "byid"
 end

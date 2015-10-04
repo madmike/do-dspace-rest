@@ -2,11 +2,10 @@
 require 'yaml';
 require 'faker';
 require "highline/import"
-require 'do-dspace-rest'
-
+require 'dspace/rest'
 
 baseurl, test_data_file, email, password = ARGV
-baseurl, test_data_file, email, password = ["http://localhost:8080/rest", "bin/gen_test_data.yml", "admin@admin.edu", "admin"]
+#baseurl, test_data_file, email, password = ["http://localhost:8080/rest", "gen.yml", "admin@admin.edu", "admin"]
 
 baseurl = ask("url of dspace rest endpoint ") unless baseurl
 test_data_file = ask("test data file (yml format please) ") unless test_data_file
@@ -21,8 +20,8 @@ if ("Y" != ask("continue ? (Y/N)")) then
   return
 end
 
-DSpaceRest.start(baseurl)
-dspace_api = DSpaceRest.connection
+DSpace::Rest::API.start(baseurl)
+dspace_api = DSpace::Rest::API.connection
 puts dspace_api
 dspace_api.login({'email' => email, 'password' => password })
 
@@ -44,7 +43,7 @@ def generate(file)
           n.times do
 
             md = fake_metadata
-            item = DItem.new(coll, {"metadata" => md})
+            item = DSpace::Rest::DItem.new(coll, {"metadata" => md})
             success = false
             while (not success) do
               begin
@@ -66,18 +65,18 @@ def generate(file)
 end
 
 def find_or_create_community(comm_name)
-  com = DCommunity.find_by_name(comm_name)
+  com = DSpace::Rest::DCommunity.find_by_name(comm_name)
   if (com.nil?) then
-    com = DCommunity.new(nil, "name" => comm_name)
+    com = DSpace::Rest::DCommunity.new(nil, "name" => comm_name)
     com.save
   end
   return com
 end
 
 def find_or_create_collection(parent, name)
-  coll = DCollection.find_by_name(name)
+  coll = DSpace::Rest::DCollection.find_by_name(name)
   if (coll.nil?) then
-    coll = DCollection.new(parent, {"name" => name})
+    coll = DSpace::Rest::DCollection.new(parent, {"name" => name})
     coll.save
   end
   return coll

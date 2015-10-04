@@ -1,6 +1,0 @@
-require 'dspace_rest'
-require 'dspace_obj'
-require 'dbitstream'
-require 'ditem'
-require 'dcollection'
-require 'dcommunity'
