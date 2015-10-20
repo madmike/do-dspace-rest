@@ -1,20 +1,5 @@
 communities: [
 {
-  name: "Senior Theses"
-},
-{
-  name: "Doctoral Dissertations"
-},
-{
-  name: "Archival Collections from the Middle East"
-},
-{
-  name: "Student Protests at My University"
-},
-{
-  name: "Senior Theses"
-},
-{
   name: "Multi Media",
   collections: [
     { name: "Reality Squared" }

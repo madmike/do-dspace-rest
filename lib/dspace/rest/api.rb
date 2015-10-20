@@ -46,7 +46,7 @@ module DSpace
 
       def get(path, params)
         uri = @baseurl + path;
-        res = RestClient.get uri, {"params" => params}.merge(build_options)
+        res = RestClient.get uri,  { :params => params}.merge(build_options)
         @last_res = JSON.parse(res)
         return @last_res
       end
@@ -73,8 +73,8 @@ module DSpace
       private
 
       def build_options
-        options = {:content_type => :json, :accept => :json}
-        options['rest-dspace-token'] = @login_token if (not @login_token.nil?)
+        options = {:content_type => :json, :accept => :json, :verify => OpenSSL::SSL::VERIFY_NONE}
+        options['rest-dspace-token'] = @login_token unless  @login_token.nil?
         return options
       end
 

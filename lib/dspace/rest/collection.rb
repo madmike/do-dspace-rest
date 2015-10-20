@@ -1,19 +1,13 @@
 
 module DSpace
   module Rest
-
-    class Collection < DSpaceObj
+    class Collection
       PATH = "/collections"
+      include DSpaceObj
+      extend DSpaceObjClassMethods
+
       EXPAND = ["parentCommunityList", "parentCommunity", "items", "license", "logo"];
       EXPAND_TO_ARRAY = ["parentCommunityList", "items"];
-
-      def self.list(params)
-        return DSpaceObj.get_list(nil, self, params)
-      end
-
-      def self.find_by_id(id, expand = [])
-        return DSpaceObj.get_one(nil, "#{PATH}/#{id}", self, expand)
-      end
 
       def self.find_by_name(name)
         # TODO figure out hwo to use /collections/find-collection

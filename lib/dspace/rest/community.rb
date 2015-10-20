@@ -1,21 +1,16 @@
 
 module DSpace
   module Rest
-    class Community < DSpaceObj
+    class Community
       PATH = "/communities"
+      include DSpaceObj
+      extend DSpaceObjClassMethods
+
       EXPAND = ["parentCommunity", "collections", "subCommunities", "logo"]
       EXPAND_TO_ARRAY = ["subCommunities", "collections"];
 
-      def self.list(params)
-        return DSpaceObj.get_list(nil, self, params)
-      end
-
       def self.topCommuities(params)
         return DSpaceObj.get_sublist(nil, self, '/top-communities', params)
-      end
-
-      def self.find_by_id(id, expand = [])
-        return DSpaceObj.get_one(nil, "#{PATH}/#{id}", self, expand)
       end
 
       def self.find_by_name(name)

@@ -16,14 +16,14 @@ RSpec.shared_examples "byid" do
       obj = described_class.list({'limit' => 1})
       if (obj.count > 0) then
         one = obj[0]
-        the_one = described_class.find_by_id(one.id, [expand]);
+        the_one = described_class.find_by_id(one.id, [expand])
         described_class::EXPAND.each do |x|
           #puts "#{expand} tst-#{x} #{the_one.attributes.keys.join(":")}"
           if (the_one.attributes.keys.include?(x) != (x == expand)) then
             if (x == expand) then
               raise "#{x} should be expanded for #{the_one.to_s}"
             else
-              raise "#{x} should NOT be expanded for #{the_one.to_s}"
+              raise "#{x} has value '#{the_one.attributes[x]}', but should NOT be expanded for #{the_one.to_s}"
             end
           end
         end
@@ -44,7 +44,7 @@ RSpec.shared_examples "byid" do
           if (pair.include?(x)) then
             raise "#{x} should be expanded for #{the_one.to_s} and with expand=#{pair.join(",")}"
           else
-            raise "#{x} should NOT be expanded for #{the_one.to_s} and with expand=#{pair.join(",")}"
+            raise "#{x} has value value '#{the_one.attributes[x]}', but should NOT be expanded for #{the_one.to_s} and with expand=#{pair.join(",")}"
           end
         end
       end
