@@ -9,7 +9,7 @@ RSpec.shared_examples "has_many" do |method|
       subs = the_one.send method, {}
       expect(subs.is_a?(Array)).to be true
     else
-      raise "not enough #{described_class} objects for test case"
+      raise "not enough objects to test #{described_class}.#{method}"
     end
   end
 
@@ -28,7 +28,7 @@ RSpec.shared_examples "has_many" do |method|
           break
         end
       end
-      raise "not enough #{described_class} objects for test case" if not success
+      raise "not enough objects to test #{described_class}.#{method}" if not success
     end
   end
 
@@ -47,7 +47,7 @@ RSpec.shared_examples "has_many" do |method|
           break
         end
       end
-      raise "not enough #{described_class} objects for test case" if not success
+      raise "not enough objects to test #{described_class}.#{method}" if not success
     end
   end
 

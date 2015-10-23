@@ -47,12 +47,9 @@ module DSpace
         return "#{self.class.to_s}:#{link}"
       end
 
+      # list klass obects inside self
       def list(klass, params)
         DSpaceObj.get(self, self.link + klass::PATH, params)
-      end
-
-      def self.get(parent, path, params)
-        convert_value(parent, API.connection.get(path, params))
       end
 
       # TODO there really should be a parentList request - instead of the current parentComm/CollList
@@ -66,10 +63,15 @@ module DSpace
           parents << com if com
         end
         if @attributes['parentCommunityList'] then
-            list =  DSpaceObj.convert['parentCommunityList']
-            parents += list if list
+          list =  DSpaceObj.convert['parentCommunityList']
+          parents += list if list
         end
         parents
+      end
+
+      # TODO all dspaceObj should be delivered with info on direct parent
+      def DSpaceObj.get(parent, path, params)
+        convert_value(parent, API.connection.get(path, params))
       end
 
       def DSpaceObj.createFromHash(parent, value)

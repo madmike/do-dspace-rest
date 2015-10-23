@@ -21,7 +21,7 @@ RSpec.shared_examples "crud" do
   def update_attrs(klass, id, attrs)
     upd = klass.find_by_id(id)
     attrs.each { |k, v|
-      upd[k] = v
+      upd.attributes[k] = v
     }
     upd.save
     read = klass.find_by_id(id)
