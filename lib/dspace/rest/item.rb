@@ -1,9 +1,8 @@
 module DSpace
   module Rest
-    class Item
+    class Item < DSpaceObj
       PATH = "/items"
-      include DSpaceObj
-      extend DSpaceObjClassMethods
+        extend DSpaceObjClassMethods
 
       EXPAND = ["metadata", "parentCollection", "parentCollectionList", "parentCommunityList", "bitstreams"]
       EXPAND_TO_ARRAY = ["parentCollectionList", "parentCommunityList", "bitstreams"];

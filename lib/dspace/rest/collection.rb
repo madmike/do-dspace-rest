@@ -1,9 +1,8 @@
 
 module DSpace
   module Rest
-    class Collection
+    class Collection < DSpaceObj
       PATH = "/collections"
-      include DSpaceObj
       extend DSpaceObjClassMethods
 
       EXPAND = ["parentCommunityList", "parentCommunity", "items", "license", "logo"];

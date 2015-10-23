@@ -1,9 +1,8 @@
 
 module DSpace
   module Rest
-    class Bitstream
+    class Bitstream < DSpaceObj
       PATH = "/bitstreams"
-      include DSpaceObj
       extend DSpaceObjClassMethods
 
       EXPAND = ["parent", "policies"];
