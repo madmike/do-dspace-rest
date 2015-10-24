@@ -5,6 +5,10 @@ module DSpace
       PATH = "/communities"
       extend DSpaceObjClassMethods
 
+      def self.valid_attributes
+        DSpaceObj.valid_attributes + %w(parentCommunity collections subCommunities logo)
+      end
+
       def self.topCommuities(params)
         get_list(nil, PATH + '/top-communities', Community, params)
       end
@@ -14,14 +18,6 @@ module DSpace
           return com if com.attributes['name'] == name.strip
         end
         return nil
-      end
-
-      def description
-        return @attributes['shortDescription']
-      end
-
-      def introduction
-        return @attributes['introductoryText']
       end
 
       def communities(params)

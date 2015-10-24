@@ -1,4 +1,6 @@
 RSpec.shared_examples "byid" do
+  valid_names = described_class.valid_attributes - DSpace::Rest::DSpaceObj.valid_attributes;
+
   it "byid" do
     obj = described_class.list({'limit' => 1})
     expect(obj.is_a?(Array)).to be true
@@ -11,19 +13,19 @@ RSpec.shared_examples "byid" do
     end
   end
 
-  described_class::EXPAND.each do |expand|
+  valid_names.each do |expand|
     it "byid_expand_#{expand}" do
       obj = described_class.list({'limit' => 1})
       if (obj.count > 0) then
         one = obj[0]
         the_one = described_class.find_by_id(one.id, [expand])
-        described_class::EXPAND.each do |x|
+        valid_names.each do |x|
           #puts "#{expand} tst-#{x} #{the_one.attributes.keys.join(":")}"
           if (the_one.attributes.keys.include?(x) != (x == expand)) then
             if (x == expand) then
               raise "#{x} should be expanded for #{the_one.to_s}"
             else
-              raise "#{x} has value '#{the_one.attributes[x]}', but should NOT be expanded for #{the_one.to_s}"
+              raise "#{x} has value '#{the_one.attributes[x]}', but should NOT be expanded for #{the_one.to_s} with expand=#{expand}"
             end
           end
         end
@@ -34,12 +36,12 @@ RSpec.shared_examples "byid" do
   end
 
   it "byid_expand_two" do
-    pair = [described_class::EXPAND.first, described_class::EXPAND.last]
+    pair = [valid_names.first, valid_names.last]
     obj = described_class.list({'limit' => 1})
     if (obj.count > 0) then
       one = obj[0]
       the_one = described_class.find_by_id(one.id, pair);
-      described_class::EXPAND.each do |x|
+      valid_names.each do |x|
         if (the_one.attributes.keys.include?(x) != pair.include?(x)) then
           if (pair.include?(x)) then
             raise "#{x} should be expanded for #{the_one.to_s} and with expand=#{pair.join(",")}"
@@ -60,7 +62,7 @@ RSpec.shared_examples "byid" do
       the_one = described_class.find_by_id(one.id, ["all"]);
       # test for ARRAY type
 
-      described_class::EXPAND.each do |ex|
+      valid_names.each do |ex|
         if (not the_one.attributes.keys.include?(ex)) then
           raise "#{ex} should be expanded"
         end

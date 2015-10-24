@@ -1,23 +1,33 @@
 module DSpace
   module Rest
     class DSpaceObj
-      attr_reader :attributes, :parent
+      attr_reader :parent, :attributes
+
+      UNDEFINED_VALUE = Object.new();
+
+      def self.valid_attributes
+        %w(id handle name)
+      end
 
       def initialize(parent, hsh)
         @attributes = hsh
-        @parent = parent
       end
 
-      def id
-        return @attributes['id']
+      def id() @attributes['id'] end
+      def handle() @attributes['handle']  end
+      def name() @attributes['name'] end
+
+      def get(attr)
+        a = attr.to_s
+        raise "can't get unknown #{attr}" if self.class.valid_attributes.index(a).nil?
+        DSpaceObj.convert_value(nil, @attributes[a] || UNDEFINED_VALUE)
       end
 
-      def handle
-        return @attributes['handle']
-      end
-
-      def name
-        return @attributes['name']
+      def set(attr, value)
+        a = attr.to_s
+        raise "can't assign to #{attr}" if %w(id handle).index(a)
+        raise "can't set unknown #{attr}" if self.class.valid_attributes.index(a).nil?
+        @attributes[a] = value   # TODO if DSPaceObj - serialize to HASH ???
       end
 
       def link
@@ -27,7 +37,7 @@ module DSpace
       def save
         if (id)
           link = self.link
-        else
+        elses
           link = self.class::PATH
           link = @parent.link + link if @parent
         end
