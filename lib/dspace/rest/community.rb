@@ -5,9 +5,6 @@ module DSpace
       PATH = "/communities"
       extend DSpaceObjClassMethods
 
-      EXPAND = ["parentCommunity", "collections", "subCommunities", "logo"]
-      EXPAND_TO_ARRAY = ["subCommunities", "collections"];
-
       def self.topCommuities(params)
         get_list(nil, PATH + '/top-communities', Community, params)
       end
@@ -36,6 +33,5 @@ module DSpace
       end
 
     end
-
   end
 end
