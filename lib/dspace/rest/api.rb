@@ -48,26 +48,22 @@ module DSpace
         uri = @baseurl + path;
         res = RestClient.get uri,  { :params => params}.merge(build_options)
         @last_res = JSON.parse(res)
-        return @last_res
       end
 
       def post(action, params)
         uri = @baseurl + action;
         @last_res = RestClient.post uri, params.to_json, build_options
         @last_res = JSON.parse(@last_res)
-        return @last_res
       end
 
       def put(who, params)
         uri = @baseurl + who
         @last_res = RestClient.put uri, params.to_json, build_options
-        return @last_res
       end
 
       def delete(who)
         uri = @baseurl + who;
         @last_res = RestClient.delete uri, build_options
-        return @last_res
       end
 
       private
@@ -75,7 +71,7 @@ module DSpace
       def build_options
         options = {:content_type => :json, :accept => :json, :verify => OpenSSL::SSL::VERIFY_NONE}
         options['rest-dspace-token'] = @login_token unless  @login_token.nil?
-        return options
+        options
       end
 
     end
