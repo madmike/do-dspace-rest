@@ -63,17 +63,17 @@ module DSpace
       end
 
       # TODO there really should be a parentList request - instead of the current parentComm/CollList
-      def parents
+      def parent_list
         parents = []
-        if @attributes.key?['parentCollectionList'] then
-          parents =  DSpaceObj.convert['parentCollectionList']
+        if @attributes.key?('parentCollectionList') then
+          parents = DSpaceObj.convert_value(nil, @attributes['parentCollectionList'])
         end
         if @attributes['parentCommunity'] then
-          com = DSpaceObj.convert['parentCommunity']
+          com = DSpaceObj.convert_value(nil, @attributes['parentCommunity'])
           parents << com if com
         end
-        if @attributes['parentCommunityList'] then
-          list =  DSpaceObj.convert['parentCommunityList']
+        if @attributes.key?('parentCommunityList') then
+          list =  DSpaceObj.convert_value(nil, @attributes['parentCommunityList'])
           parents += list if list
         end
         parents
@@ -81,7 +81,7 @@ module DSpace
 
       # TODO all dspaceObj should be delivered with info on direct parent
       def DSpaceObj.get(parent, path, params)
-        convert_value(parent, API.connection.get(path, params))
+        DSpaceObj.convert_value(parent, API.connection.get(path, params))
       end
 
       def DSpaceObj.createFromHash(parent, value)
