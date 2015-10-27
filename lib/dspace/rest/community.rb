@@ -10,7 +10,7 @@ module DSpace
       end
 
       def self.topCommuities(params)
-        get_list(nil, PATH + '/top-communities', Community, params)
+        DSpaceObj.get(nil, PATH + '/top-communities', params)
       end
 
       def self.find_by_name(name)
