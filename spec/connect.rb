@@ -6,6 +6,10 @@ dspace_api.login({'email' => email, 'password' => password})
 
 module DSpace
   module Rest
+    class DSpaceObj
+      attr_reader :attributes
+    end
+
     class Bitstream
       EXPAND_TO_ARRAY = ["policies"]
     end
