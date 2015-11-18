@@ -2,6 +2,11 @@ module DSpace
   module Rest
     module DSpaceObjClassMethods
 
+      def rights
+        return [:crceate, :delete, :read, :update] if self == Item
+        return [:read]
+      end
+
       def list(params)
         get(nil, self::PATH, params)
       end
@@ -13,3 +18,4 @@ module DSpace
     end
   end
 end
+

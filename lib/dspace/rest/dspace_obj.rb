@@ -1,6 +1,7 @@
 module DSpace
   module Rest
     class DSpaceObj
+
       attr_reader :parent, :attributes
 
       UNDEFINED_VALUE = Object.new();
@@ -11,11 +12,25 @@ module DSpace
 
       def initialize(parent, hsh)
         @attributes = hsh
+        self.rights
       end
 
       def id() @attributes['id'] end
       def handle() @attributes['handle']  end
       def name() @attributes['name'] end
+
+      def rights
+        unless @eights
+          if self.name[0] <= 'D' then
+            @rights = [:read]
+          elsif self.name[0] <= 'R' then
+            @rights = [:read, :update]
+          else
+            @rights = [:read, :update, :delete]
+          end
+        end
+        return @rights
+      end
 
       def get(attr)
         a = attr.to_s
@@ -92,6 +107,8 @@ module DSpace
             instance = Collection.new(parent, value)
           when 'community'
             instance = Community.new(parent, value)
+          when 'bitstream'
+            instance = Bitstream.new(parent, value)
           else
             instance = value
         end
@@ -112,4 +129,3 @@ module DSpace
     end
   end
 end
-
