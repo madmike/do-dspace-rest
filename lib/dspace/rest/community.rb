@@ -9,7 +9,7 @@ module DSpace
         DSpaceObj.valid_attributes + %w(parentCommunity collections subCommunities logo)
       end
 
-      def self.topCommuities(params)
+      def self.topCommuities(params = {})
         DSpaceObj.get(nil, PATH + '/top-communities', params)
       end
 
@@ -20,11 +20,11 @@ module DSpace
         return nil
       end
 
-      def communities(params)
+      def communities(params = {})
         return list(Community, params)
       end
 
-      def collections(params)
+      def collections(params = {})
         return list(Collection, params)
       end
 

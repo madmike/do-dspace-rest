@@ -13,7 +13,7 @@ module DSpace
         @attributes = hsh
       end
 
-      def id() @attributes['id'] end
+      def id() @attributes['uuid'] end
       def handle() @attributes['handle']  end
       def name() @attributes['name'] end
 
